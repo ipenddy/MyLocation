@@ -344,7 +344,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GVf-ch-Uz7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1413" y="-309"/>
+            <point key="canvasLocation" x="1403" y="-303"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="fBE-gX-dqz">
@@ -357,12 +357,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="8lI-Po-GbX" kind="relationship" relationship="rootViewController" id="sso-Gx-8vs"/>
+                        <segue destination="8lI-Po-GbX" kind="relationship" relationship="rootViewController" id="oeh-hz-ZBl"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I7s-xO-s7S" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="881" y="-309"/>
+            <point key="canvasLocation" x="897" y="-303"/>
         </scene>
     </scenes>
     <resources>

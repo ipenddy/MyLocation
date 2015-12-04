@@ -76,7 +76,7 @@
     if([segue.identifier isEqualToString:@"TagLocation"]){
         NSLog(@"Enter segue...");
         UINavigationController *navigationController = segue.destinationViewController;
-        LocationDetailsViewController *controller = (LocationDetailsViewController *)navigationController;
+        LocationDetailsViewController *controller = (LocationDetailsViewController *)navigationController.topViewController;
         controller.coordinate = _location.coordinate;
         controller.placemark = _placemark;
     }
