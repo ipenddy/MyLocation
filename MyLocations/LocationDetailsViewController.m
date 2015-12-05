@@ -29,7 +29,6 @@
 
 -(id)initWithCoder:(NSCoder *)aDecoder{
     if((self = [super initWithCoder:aDecoder])){
-        _descriptionText = @"";
         _categoryName = @"No Category";
         _date = [NSDate date];
     }
@@ -121,8 +120,6 @@
     self.descriptionTextView.text = _descriptionText;
     self.categoryLabel.text = _categoryName;
     
-    self.descriptionTextView.text = @"";
-    self.categoryLabel.text = @"";
 
     self.latitudeLabel.text = [NSString stringWithFormat:@"%.8f",self.coordinate.latitude];
     self.longitudeLabel.text = [NSString stringWithFormat:@"%.8f",self.coordinate.longitude];
