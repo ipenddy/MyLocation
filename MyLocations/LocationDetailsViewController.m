@@ -46,7 +46,7 @@
     Location *location = [NSEntityDescription insertNewObjectForEntityForName:@"Location" inManagedObjectContext:self.managedObjectContext];
 
 //2
-    NSLog(@"*******The Description is %@*******",_descriptionText);
+    NSLog(@"*******The Description is %@*******",self.descriptionTextView.text);
     location.locationDescription = _descriptionText;
     location.category = _categoryName;
     location.latitude = @(self.coordinate.latitude);
