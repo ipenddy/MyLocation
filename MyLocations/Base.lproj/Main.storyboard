@@ -143,7 +143,7 @@
         <scene sceneID="sBo-oK-XxR">
             <objects>
                 <tableViewController id="8lI-Po-GbX" customClass="LocationDetailsViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="ALq-Wg-v7y">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="ALq-Wg-v7y">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -191,6 +191,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="Q3d-vw-iDp" kind="push" identifier="PickCategory" id="Vwg-QN-N13"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -321,15 +324,15 @@
                             <outlet property="delegate" destination="8lI-Po-GbX" id="BDz-iL-rs7"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Tag Location" id="5OE-I3-dyB">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="nFG-vq-xzq">
+                    <navigationItem key="navigationItem" title="Tag Location" id="qVO-BU-mym">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="gbc-li-UhX">
                             <connections>
-                                <action selector="cacel:" destination="8lI-Po-GbX" id="ve0-xD-SFU"/>
+                                <action selector="cacel:" destination="8lI-Po-GbX" id="dzo-Ao-THW"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="GhI-KE-1Z1">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="Jm5-Lv-TR5">
                             <connections>
-                                <action selector="done:" destination="8lI-Po-GbX" id="deF-So-3DS"/>
+                                <action selector="done:" destination="8lI-Po-GbX" id="0Pg-SY-cbM"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -337,7 +340,7 @@
                         <outlet property="addressLabel" destination="4yq-Se-Add" id="e6C-hE-0xh"/>
                         <outlet property="categoryLabel" destination="CxO-T8-SrA" id="Yxj-PZ-iwA"/>
                         <outlet property="dateLabel" destination="rNR-Wk-a0A" id="63A-ni-219"/>
-                        <outlet property="descriptionTextView" destination="ry4-4f-JwR" id="4CQ-g7-by5"/>
+                        <outlet property="descriptionTextView" destination="ry4-4f-JwR" id="rLz-Bx-P1P"/>
                         <outlet property="latitudeLabel" destination="Hai-r4-Fki" id="yup-0n-wig"/>
                         <outlet property="longitudeLabel" destination="PUv-Q6-Leq" id="Ne9-XL-Y2i"/>
                     </connections>
@@ -345,6 +348,48 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GVf-ch-Uz7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1403" y="-303"/>
+        </scene>
+        <!--Choose Category-->
+        <scene sceneID="D6A-tk-9UT">
+            <objects>
+                <tableViewController id="Q3d-vw-iDp" customClass="CategoryPickerViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="DAC-yu-PwV">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" textLabel="MSR-Fe-KEM" style="IBUITableViewCellStyleDefault" id="czd-at-KWW">
+                                <rect key="frame" x="0.0" y="92" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="czd-at-KWW" id="6L7-iH-6ZQ">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="MSR-Fe-KEM">
+                                            <rect key="frame" x="15" y="0.0" width="290" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="FCF-WT-9T9" kind="unwind" identifier="PickedCategory" unwindAction="categoryPickerDidPickCategory:" id="wjX-3W-may"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Q3d-vw-iDp" id="lxY-KV-HeE"/>
+                            <outlet property="delegate" destination="Q3d-vw-iDp" id="RRH-83-APe"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Choose Category" id="Zfp-LL-Sm7"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OkC-2V-Ybl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="FCF-WT-9T9" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1853" y="-303"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="fBE-gX-dqz">

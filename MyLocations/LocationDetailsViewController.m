@@ -7,6 +7,8 @@
 //
 
 #import "LocationDetailsViewController.h"
+#import "HudView.h"
+#import "Location.h"
 
 @interface LocationDetailsViewController () <UITextViewDelegate>
 
@@ -21,11 +23,15 @@
 
 @implementation LocationDetailsViewController{
     NSString *_descriptionText;
+    NSString *_categoryName;
+    NSDate *_date;
 }
 
 -(id)initWithCoder:(NSCoder *)aDecoder{
     if((self = [super initWithCoder:aDecoder])){
         _descriptionText = @"";
+        _categoryName = @"No Category";
+        _date = [NSDate date];
     }
     return self;
 }
@@ -34,13 +40,50 @@
 }
 
 -(IBAction)done:(id)sender{
-    NSLog(@"Description '%@'",_descriptionText);
-    [self closeScreen];
+    HudView *hudView = [HudView hudInView:self.navigationController.view animated:YES];
+    hudView.text = @"Tagged";
+
+//1
+    Location *location = [NSEntityDescription insertNewObjectForEntityForName:@"Location" inManagedObjectContext:self.managedObjectContext];
+
+//2
+    NSLog(@"*******The Description is %@*******",_descriptionText);
+    location.locationDescription = _descriptionText;
+    location.category = _categoryName;
+    location.latitude = @(self.coordinate.latitude);
+    location.longitude = @(self.coordinate.longitude);
+    location.date = _date;
+    location.placemark = self.placemark;
+
+//    3
+    NSError *error;
+    if(![self.managedObjectContext save:&error]){
+        NSLog(@"Error:%@",error);
+        abort();
+    }
+    
+    [self performSelector:@selector(closeScreen) withObject:nil afterDelay:0.6];
     
 }
 
 -(IBAction)cacel:(id)sender{
     [self closeScreen];
+}
+
+-(IBAction)categoryPickerDidPickCategory:(UIStoryboardSegue *)segue{
+    
+    CategoryPickerViewController *viewController = segue.sourceViewController;
+    _categoryName = viewController.selectedCategoryName;
+    self.categoryLabel.text = _categoryName;
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    
+    if([segue.identifier isEqualToString:@"PickCategory"]){
+        
+        CategoryPickerViewController *controller = segue.destinationViewController;
+        controller.selectedCategoryName = _categoryName;
+    }
 }
 
 
@@ -59,25 +102,45 @@
         [formatter setTimeStyle:NSDateFormatterShortStyle];
     }
     return [formatter stringFromDate:theDate];
+};
+
+
+-(void)hideKeyboard:(UIGestureRecognizer *)gestureRecognizer{
+    
+    CGPoint point = [gestureRecognizer locationInView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+    if(indexPath != nil && indexPath.section == 0 && indexPath == 0){
+        return;
+    }
+    [self.descriptionTextView resignFirstResponder];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSLog(@"Enter Tag Location View");
+
     self.descriptionTextView.text = _descriptionText;
+    self.categoryLabel.text = _categoryName;
+    
     self.descriptionTextView.text = @"";
     self.categoryLabel.text = @"";
 
     self.latitudeLabel.text = [NSString stringWithFormat:@"%.8f",self.coordinate.latitude];
     self.longitudeLabel.text = [NSString stringWithFormat:@"%.8f",self.coordinate.longitude];
-    
+
+
     if(self.placemark != nil){
 
         self.addressLabel.text = [self stringFromPlacemark:self.placemark];
     }else{
         self.addressLabel.text = @"No Address Found";
     }
-    self.dateLabel.text = [self formatDate:[NSDate date]];
+
+    self.dateLabel.text = [self formatDate:_date];
+//    NSLog(@"Enter Tag Location View,%@ %@ %@ %@",self.latitudeLabel.text,self.longitudeLabel.text,self.addressLabel.text,self.dateLabel.text);
+    
+    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideKeyboard:)];
+    gestureRecognizer.cancelsTouchesInView = NO;
+    [self.tableView addGestureRecognizer:gestureRecognizer];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -85,21 +148,26 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    return 0;
-}
 
 #pragma mark - UITableViewDelegate
 
+-(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if( indexPath.section == 0 || indexPath.section == 1){
+        return indexPath;
+    }else{
+        return nil;
+    }
+}
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if(indexPath.section == 0 && indexPath == 0){
+        [self.descriptionTextView becomeFirstResponder];
+    }
+    
+}
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if(indexPath.section ==0 && indexPath.row == 0){
@@ -122,10 +190,12 @@
 #pragma mark - UITextViewDelegate
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(nonnull NSString *)text{
     _descriptionText = [textView.text stringByReplacingCharactersInRange:range withString:text];
+    NSLog(@"the text view in change text %@",textView.text);    
     return YES;
 }
 
 -(void)textViewDidEndEditing:(UITextView *)textView{
+    NSLog(@"the text view in end editing %@",textView.text);
     _descriptionText = textView.text;
 }
 
