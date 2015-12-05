@@ -116,6 +116,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.descriptionTextView.delegate = self;
 
     self.descriptionTextView.text = _descriptionText;
     self.categoryLabel.text = _categoryName;
