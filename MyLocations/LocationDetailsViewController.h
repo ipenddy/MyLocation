@@ -10,6 +10,13 @@
 #import <CoreLocation/CoreLocation.h>
 #import "CategoryPickerViewController.h"
 
+extern NSString *const ManagedObjectContextSaveDidFailNotification;
+#define FATAL_CORE_DATA_ERROR(__error__)\
+NSLog(@"***Fatal error in %s:%d\n%@\n%@",\
+__FILE__,__LINE__,error,[error userInfo]);\
+[[NSNotificationCenter defaultCenter]postNotificationName:\
+ManagedObjectContextSaveDidFailNotification object:error];
+
 @interface LocationDetailsViewController : UITableViewController
 
 @property(nonatomic,assign) CLLocationCoordinate2D coordinate;

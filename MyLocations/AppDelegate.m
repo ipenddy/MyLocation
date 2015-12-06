@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import <CoreData/CoreData.h>
 #import "CurrentLocationViewController.h"
-
+NSString *const ManagedObjectContextSaveDidFailNotification = @"ManagedObjectContextSaveDidFailNotification";
 
 @interface AppDelegate ()
 
@@ -17,13 +17,22 @@
 @property(nonatomic,strong)NSManagedObjectModel *managedOjbectModel;
 @property(nonatomic,strong)NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+
 @end
 
-@implementation AppDelegate
+@implementation AppDelegate{
 
+}
+
+-(void)fatalCoreDataError:(NSNotificationCenter *)notification{
+    
+    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Internal Error", nil) message:NSLocalizedString(@"There was a fatal error in the app and it cannot continue.\n\nPress OK to terminate the app.Sorry for the inconvenience.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil, nil];
+    [alertView show];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(fatalCoreDataError:) name:ManagedObjectContextSaveDidFailNotification object:nil];
     
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
     
@@ -113,6 +122,11 @@
         }
     }
     return _managedObjectContext;
+}
+
+#pragma mark -UIAlertViewDelegate
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    abort();
 }
 
 @end
